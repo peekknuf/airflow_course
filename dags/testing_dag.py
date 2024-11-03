@@ -17,7 +17,7 @@ default_args = {
     description="Testing DAG",
     schedule_interval=timedelta(days=1),
     dagrun_timeout=timedelta(minutes=60),
-    tags=["example", "testing"],
+    tags=["practice", "testing"],
     catchup=False)
 
 def my_dag():
@@ -31,11 +31,19 @@ def my_dag():
         sleep(3)
 
     @task
+    def wait1():
+        sleep(5)
+
+    @task
+    def wait2():
+        sleep(7)
+
+    @task
     def print_goodbye():
         print("goodbye world")
 
    
-    print_hello() >> wait() >> print_goodbye()
+    print_hello() >> [wait(), wait1(), wait2()] >> print_goodbye()
 
 my_dag()
 
